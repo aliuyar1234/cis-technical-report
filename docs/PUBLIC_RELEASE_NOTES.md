@@ -7,6 +7,7 @@ This is a docs-only public release of the CIS technical report. Implementation c
 - The paper: `docs/PAPER_PUBLISH_READY.md`
 - Supporting docs: `docs/CHANGELOG.md`, `docs/SUBMISSION_TODO.md`, `docs/METHODS_EXTRACTED_PUBLIC.md`
 - Redacted evidence bundle under `/evidence` (see `/evidence/README.md`)
+- Release tag: `v0.1` (docs-only public release)
 
 ## Redactions
 
