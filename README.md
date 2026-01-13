@@ -40,7 +40,3 @@ DI50 (iter-000149): **2.2083** with **CI95** **[1.7033, 2.7133]**.
 - Verify run IDs and seeds in [`evidence/runs`](evidence/runs) match the IDs cited in the paper.
 
 For release details and redaction policy, see [`docs/PUBLIC_RELEASE_NOTES.md`](docs/PUBLIC_RELEASE_NOTES.md) and [`docs/SECURITY_AND_PRIVACY.md`](docs/SECURITY_AND_PRIVACY.md).
-
-## PDF Export
-
-- LaTeX wrapper for Overleaf: [`latex/README.md`](latex/README.md)
