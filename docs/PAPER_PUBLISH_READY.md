@@ -96,15 +96,15 @@ At a high level, CIS organizes work around a canonical CLI (`cis`) that reads/wr
 
 ```mermaid
 flowchart LR
-  A[CLI: cis<br/>init/run/eval/train<br/>frontier govern/calibrate<br/>report render/serve] --> B[Run Record<br/>immutable, schema-validated]
-  A --> C[Workspace Artifacts<br/>content-addressed dirs<br/>schema-validated JSON]
-  A --> D[Sandbox Module<br/>tool execution<br/>offline-by-default]
-  D --> E[Verifier<br/>deterministic pass or fail]
-  E --> F[Metrics/Reports<br/>PASS@1, DI50/CI95<br/>iter summaries]
-  F --> G[Promotion/Rollback Gates<br/>(Never-Worse)]
-  G --> H[Adapters Registry<br/>PEFT: LoRA/LoRA+/DoRA]
+  A[CLI cis: init, run, eval, train, frontier, report] --> B[Run Record: immutable, schema-validated]
+  A --> C[Workspace Artifacts: content-addressed JSON]
+  A --> D[Sandbox Module: offline-by-default]
+  D --> E[Verifier: deterministic pass or fail]
+  E --> F[Metrics/Reports: PASS@1, DI50/CI95]
+  F --> G[Promotion/Rollback Gates: Never-Worse]
+  G --> H[Adapters Registry: LoRA, LoRA+, DoRA]
   H --> A
-  D --> I[Incidents + Quarantine<br/>offline violations<br/>determinism issues<br/>verifier flakiness]
+  D --> I[Incidents and Quarantine]
   I --> G
 ```
 
