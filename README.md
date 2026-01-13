@@ -17,12 +17,14 @@ DI50 (iter-000149): **2.2083** with **CI95** **[1.7033, 2.7133]**.
 
 ## What's Public vs. Private
 
-- Public: paper (`docs/PAPER_PUBLISH_READY.md`), supporting docs, and a redacted evidence bundle under `/evidence`.
+- Public: paper (`docs/PAPER.md`), supporting docs, and a redacted evidence bundle under `/evidence`.
 - Private: implementation code and internal specs.
+
+Docs overview: `docs/INDEX.md`.
 
 ## How to Verify the Claims (No Training Required)
 
-1. Read the paper in `docs/PAPER_PUBLISH_READY.md` for methodology and reported results.
+1. Read the paper in `docs/PAPER.md` for methodology and reported results.
 2. Inspect `/evidence/README.md` for the list of included redacted artifacts and redaction policy.
 3. Cross-check the PASS@1 table and DI50/CI95 values against the evidence files (when available).
 

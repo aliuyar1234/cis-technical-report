@@ -3,7 +3,7 @@
 ## Included
 
 - `README.md`
-- `docs/PAPER_PUBLISH_READY.md`
+- `docs/PAPER.md`
 - `docs/CHANGELOG.md`
 - `docs/SUBMISSION_TODO.md`
 - `docs/METHODS_EXTRACTED_PUBLIC.md`
