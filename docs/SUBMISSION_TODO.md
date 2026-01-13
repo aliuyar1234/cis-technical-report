@@ -45,8 +45,8 @@ This file enumerates submission-grade gaps that must be filled **without guessin
 
 ## J. Artifact availability / openness
 
-- **TODO:** Decide and document what will be released publicly:
-  - code repository (with commit corresponding to reported runs)
-  - suite snapshots (or a redacted/public subset)
-  - run records / metrics / reports sufficient to reproduce the tables
-  - licensing and any redactions required
+- Public release decision (current):
+  - This repository is a **docs-only** public release: paper + supporting docs + **redacted evidence** under `/evidence`.
+  - Implementation code and internal specs are intentionally withheld.
+  - Evidence includes redacted `metrics.json`, `summary.md`, and `run_record.json` files sufficient to verify the reported PASS@1 table and DI50/CI95 without running training.
+  - License: see `LICENSE` (all rights reserved).
