@@ -1,0 +1,25 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+
+% Render the Markdown paper directly (docs-only repo).
+% Overleaf/TeXLive typically includes the 'markdown' package.
+\usepackage[
+  fencedCode,
+  pipeTables
+]{markdown}
+
+\begin{document}
+
+% The canonical paper text lives in PAPER.md (copied from docs/PAPER.md).
+\markdownInput{PAPER.md}
+
+\end{document}
+
