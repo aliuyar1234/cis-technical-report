@@ -55,11 +55,11 @@ This report contributes the following (constrained to what is specified in the c
 
 A **verifiable task** is a task for which there exists a **deterministic verifier** that maps a candidate model output to **pass/fail** (optionally with structured evidence). CIS assumes that verifiers are the source of truth: training signals (distillation targets and rewards) are grounded in verifier outcomes, not model self-assessments.
 
-Verifier implementations are selected by `verifier_id` and live in `src/cis/verifiers/registry.py` with deterministic backends for code (`VER-001`/`VER-002`), math (`VER-003`), logic (`VER-004`), CUT (`VER-005`..`VER-008`), and composite (`VER-011`). Each verifier emits a determinism hash, and every evaluation run performs a flakiness probe that reruns the verifier `CONST-013` times; any mismatch raises `ERR-004` and aborts the run (see `src/cis/verifiers/registry.py`, `src/cis/verifiers/*.py`, `src/cis/core/eval.py`, `spec/00_CANONICAL.md`).
+Verifier implementations are selected by `verifier_id` with deterministic backends for code (`VER-001`/`VER-002`), math (`VER-003`), logic (`VER-004`), CUT (`VER-005`..`VER-008`), and composite (`VER-011`). Each verifier emits a determinism hash, and every evaluation run performs a flakiness probe that reruns the verifier `CONST-013` times; any mismatch raises `ERR-004` and aborts the run (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`).
 
 ### 3.2 Core terms (as used in this paper)
 
-- **Artifact:** A schema-validated output of a CIS command, stored in the workspace artifact system. Artifacts are content-addressed by `schema_hash` computed as SHA-256 over canonical JSON (sorted keys; `schema_hash`/`created_at` removed, and content-addressed id fields omitted). `compute_schema_hash` sets both `schema_hash` and the primary id for content-addressed schemas; ART-* paths are resolved via the canonical registry (see `src/cis/core/hashing.py`, `src/cis/core/paths.py`, `spec/00_CANONICAL.md`).
+- **Artifact:** A schema-validated output of a CIS command, stored in the workspace artifact system. Artifacts are content-addressed by `schema_hash` computed as SHA-256 over canonical JSON (sorted keys; `schema_hash`/`created_at` removed, and content-addressed id fields omitted). `compute_schema_hash` sets both `schema_hash` and the primary id for content-addressed schemas; ART-* paths are resolved via a canonical registry (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`).
 - **Run record:** An immutable, schema-validated JSON record written per run, capturing provenance (seed, config hash, git state, artifact references, and promotion decisions).
 - **Suite snapshot:** A fixed manifest of tasks used for evaluation and/or training, containing `task_ids` and a designated **hidden subset** (`hidden_task_ids`).
 - **Hidden subset:** Tasks excluded from default evaluation; inclusion requires **sealed evaluator mode** and an explicit unlock token.
@@ -74,7 +74,7 @@ Verifier implementations are selected by `verifier_id` and live in `src/cis/veri
 - In CIS terminology, evaluation corresponds to `attempt_index = 0` (generation is “unchanged” relative to any training-only exploration mechanisms).
 - Unless explicitly stated otherwise, PASS@1 in this report is computed on the **visible subset** of each suite snapshot (hidden tasks excluded).
 
-Evaluation uses a single attempt per task (`attempt_index=0`) with `attempt_seed = sha256(seed|task_id)` and no generation retries; PASS@1 is the unweighted fraction of tasks whose verifier returns pass (see `src/cis/core/eval.py`). For model decoding, `do_sample` is disabled at `attempt_index=0` (greedy decode). `max_new_tokens` comes from the task budget (default `BUDGET-001`) and is capped to 64 tokens for families `FAMILY-003..FAMILY-008`; sampling temperatures/top_p/top_k are only used when `attempt_index>0` (training-only exploration) (see `src/cis/models/backend.py`, `spec/00_CANONICAL.md`). Each evaluation also runs a verifier flakiness probe (`CONST-013` reruns); instability raises `ERR-004` and aborts the run (see `src/cis/verifiers/registry.py`, `src/cis/core/eval.py`).
+Evaluation uses a single attempt per task (`attempt_index=0`) with `attempt_seed = sha256(seed|task_id)` and no generation retries; PASS@1 is the unweighted fraction of tasks whose verifier returns pass. For model decoding, `do_sample` is disabled at `attempt_index=0` (greedy decode). `max_new_tokens` comes from the task budget (default `BUDGET-001`) and is capped to 64 tokens for families `FAMILY-003..FAMILY-008`; sampling temperatures/top_p/top_k are only used when `attempt_index>0` (training-only exploration). Each evaluation also runs a verifier flakiness probe (`CONST-013` reruns); instability raises `ERR-004` and aborts the run (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`).
 
 ### 3.4 Difficulty indexing: DI, DI50, and CI95
 
@@ -84,7 +84,7 @@ CIS reports difficulty-indexing summaries produced by a **DI calibration** step.
 - **DI50:** a single scalar summary reported per iteration; the name indicates a “50% point” of the DI-calibrated evaluation summary.
 - **CI95:** a 95% confidence interval reported alongside DI50.
 
-CIS fits a 1PL logistic difficulty model (Rasch-style) with MAP estimation under a zero-mean Gaussian prior (sigma=3). Task difficulty parameters `b` are derived from pass rates, and solver ability `theta` is estimated via Newton steps with an L2 penalty; DI50 is the default solver theta from the latest stable calibration. CI95 is computed as `theta +/- 1.96 * SE` from the Hessian, and stability requires median CI width <= CONST-005, bootstrap Spearman >= CONST-006, and flakiness_rate <= CONST-007 (see `src/cis/frontier/calibrate.py`, `spec/00_CANONICAL.md`).
+CIS fits a 1PL logistic difficulty model (Rasch-style) with MAP estimation under a zero-mean Gaussian prior (sigma=3). Task difficulty parameters `b` are derived from pass rates, and solver ability `theta` is estimated via Newton steps with an L2 penalty; DI50 is the default solver theta from the latest stable calibration. CI95 is computed as `theta +/- 1.96 * SE` from the Hessian, and stability requires median CI width <= CONST-005, bootstrap Spearman >= CONST-006, and flakiness_rate <= CONST-007 (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`).
 
 ---
 
@@ -125,7 +125,7 @@ CIS’s provenance model is workspace-centric:
 
 The system description additionally notes that run records capture **model selector** and **promotion decision** information.
 
-Run record schema is defined in `spec/05_INTERFACES_AND_SCHEMAS.md` (SCH-004). Required fields include `run_id`, `created_at`, `seed`, `workspace_id`, `git`, `model_selector`, `reasoning_mode`, `suite_snapshot_ids`, `budgets`, `metrics`, `token_counts`, and `artifacts` (see `spec/05_INTERFACES_AND_SCHEMAS.md`, `src/cis/core/records.py`).
+Run record schema is SCH-004. Required fields include `run_id`, `created_at`, `seed`, `workspace_id`, `git`, `model_selector`, `reasoning_mode`, `suite_snapshot_ids`, `budgets`, `metrics`, `token_counts`, and `artifacts` (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md` and the redacted run records under `/evidence/runs`).
 
 ### 4.3 Suite Snapshots and Hidden Subsets
 
@@ -134,7 +134,7 @@ CIS uses **suite snapshots**: fixed manifests listing evaluated task IDs (`task_
 - Hidden evaluation requires **sealed evaluator mode** plus an **unlock token**.
 - Default evaluations and the PASS@1 results in this report are computed on the **visible** subset.
 
-Unlock tokens are resolved to ART-041 by default and must be a non-empty file. Hidden tasks can only be evaluated when `include_hidden` + `sealed_evaluator_mode` + a valid token are all true; otherwise evaluation raises `ERR-010`. Hidden-subset access is logged as a `hidden_subset_access` event in the workspace DB (see `src/cis/core/unlock.py`, `src/cis/core/eval.py`).
+Unlock tokens are resolved to ART-041 by default and must be a non-empty file. Hidden tasks can only be evaluated when `include_hidden` + `sealed_evaluator_mode` + a valid token are all true; otherwise evaluation raises `ERR-010`. Hidden-subset access is logged as a `hidden_subset_access` event in the workspace DB (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`).
 
 ### 4.4 Sandbox & Offline Enforcement
 
@@ -147,7 +147,7 @@ CIS routes tool execution through a sandbox module and enforces an offline-by-de
 
 CIS also includes an incidents/quarantine mechanism for safety anomalies (offline violations, verifier flakiness, determinism issues), which can trigger quarantine/rollback behavior.
 
-Sandboxed tool execution uses Docker when available: a read-only root filesystem, `/tmp` tmpfs, workspace mounted at `/workspace`, and `--network none` when offline (see `src/cis/sandbox/docker.py`). If Docker is unavailable, a local sandbox wrapper blocks network sockets and process spawning and prevents writes outside the workspace. Tool allowlists are recorded in `SCH-027` with `allow_network_default=false` (see `src/cis/sandbox/allowlist.py`). Incident reports are schema-validated as SCH-015 (see `spec/05_INTERFACES_AND_SCHEMAS.md`, `src/cis/obs/incidents.py`).
+Sandboxed tool execution uses Docker when available: a read-only root filesystem, `/tmp` tmpfs, workspace mounted at `/workspace`, and `--network none` when offline. If Docker is unavailable, a local sandbox wrapper blocks network sockets and process spawning and prevents writes outside the workspace. Tool allowlists are recorded in SCH-027 with `allow_network_default=false`. Incident reports are schema-validated as SCH-015 (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`).
 
 ### 4.5 Governance, DI Calibration, and Frontier Control
 
@@ -158,7 +158,7 @@ CIS includes a governance layer for candidate tasks and difficulty calibration:
 
 The current draft describes the existence of these components but does not specify the statistical model, governance policies, or acceptance thresholds.
 
-Frontier tasks are generated deterministically from seeded templates across multiple families (affine cut, implication, math_symbolic, logic_smt, composite, code_algo, code_bugfix) and deduplicated by normalized task hashes. Governance excludes tasks seen in the last CONST-064 training iterations, applies saturation retirement, enforces DI variance near CONST-024, and emits calibration/sentinel/alert buckets in the ART-032 candidate set manifest (see `src/cis/tasks/generators.py`, `src/cis/frontier/governance.py`, `spec/00_CANONICAL.md`).
+Frontier tasks are generated deterministically from seeded templates across multiple families (affine cut, implication, math_symbolic, logic_smt, composite, code_algo, code_bugfix) and deduplicated by normalized task hashes. Governance excludes tasks seen in the last CONST-064 training iterations, applies saturation retirement, enforces DI variance near CONST-024, and emits calibration/sentinel/alert buckets in the ART-032 candidate set manifest (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`).
 
 ### 4.6 Training Loop: Distillation + RLVR + PEFT
 
@@ -171,7 +171,7 @@ CIS implements an iterative training loop grounded in verifiers:
 
 This paper reports results using DoRA adapters (PEFT) on the base model **qwen2_5_coder_7b_instruct** (see Section 5).
 
-RLVR datasets are built by sampling visible tasks from stable suites plus DI-band frontier tasks, generating groups of candidates per task, assigning binary rewards from verifier pass/fail, and standardizing advantages within each group (see `src/cis/training/rlvr.py`). **TODO:** Provide the optimizer/hyperparameters and training schedule for the reported runs.
+RLVR datasets are built by sampling visible tasks from stable suites plus DI-band frontier tasks, generating groups of candidates per task, assigning binary rewards from verifier pass/fail, and standardizing advantages within each group (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`). **TODO:** Provide the optimizer/hyperparameters and training schedule for the reported runs.
 
 ### 4.7 Promotion/Rollback Gates (Never-Worse)
 
@@ -181,7 +181,7 @@ CIS treats regression prevention as a primary system requirement:
 - Adapters that regress on previously passed tasks are rejected and rolled back.
 - The system records rollback decisions in iteration reports and run records (examples in Section 6).
 
-Promotion uses a "never-worse" regression gate over stable suites (`SUITE-001..SUITE-004`): any task passed by the baseline but failed by the challenger counts as a regression; promotion requires `regression_count=0` (see `src/cis/training/train.py`). Decisions also require adapter-check pass (`ERR-011` on failure), teacher hint dependence pass (`ERR-017`), and ladder regression pass (`ERR-018`), and they promote only if max PASS@1 delta >= CONST-016 or DI50 delta >= CONST-017 (see `src/cis/training/train.py`, `spec/00_CANONICAL.md`).
+Promotion uses a "never-worse" regression gate over stable suites (`SUITE-001..SUITE-004`): any task passed by the baseline but failed by the challenger counts as a regression; promotion requires `regression_count=0`. Decisions also require adapter-check pass (`ERR-011` on failure), teacher hint dependence pass (`ERR-017`), and ladder regression pass (`ERR-018`), and they promote only if max PASS@1 delta >= CONST-016 or DI50 delta >= CONST-017 (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`).
 
 ---
 
@@ -259,7 +259,7 @@ For `iter-000149`, the report includes:
 
 - **DI50:** `2.2083` with **CI95** `[1.7033, 2.7133]` (see `<WS_ROOT>/reports/iter-000149/summary.md`)
 
-See Section 3.4 for the DI calibration model and CI95 definition (see `src/cis/frontier/calibrate.py`).
+See Section 3.4 for the DI calibration model and CI95 definition.
 
 ### 6.3 Rollbacks prevent regressions
 
@@ -272,7 +272,7 @@ CIS rejects challenger adapters that regress on previously passed tasks. The fol
   - Report: `<WS_ROOT>/reports/iter-000151/summary.md`
   - Run record: `<WS_ROOT>/runs/run-20260112T142709Z-9477cd3c/run_record.json`
 
-*Interpretation (conservative):* These records demonstrate that CIS's governance workflow can detect and reject regressions on named tasks and document the decision in artifacts. Gate definitions are implemented in `src/cis/training/train.py`, but broader generalization beyond these suites is not claimed.
+*Interpretation (conservative):* These records demonstrate that CIS's governance workflow can detect and reject regressions on named tasks and document the decision in artifacts. Implementation details are withheld; broader generalization beyond these suites is not claimed.
 
 ---
 
@@ -292,10 +292,7 @@ To restore learning signal without contaminating evaluation, CIS applies a deter
 - For `attempt_index > 0` (training attempts only), deterministically flip `sat ↔ unsat` on odd attempts.
 - For `attempt_index = 0` (evaluation), generation is unchanged.
 
-Implementation and tests:
-
-- Code: `src/cis/models/backend.py` (`_explore_logic_answer` + FAMILY-004 integration)
-- Test: `tests/test_backend_logic_exploration.py`
+Implementation note: the mechanism is implemented and exercised in the private codebase; details are withheld in this docs-only release.
 
 Empirically, this restored verified UNSAT samples in distillation datasets and unlocked promotions (as referenced by the system reports; see Section 6.1).
 
@@ -328,12 +325,12 @@ CIS exposes a **deterministic mode** intended to make runs repeatable. Based on 
 2. **Seed control:** A run seed is provided via `--seed <seed>` and is recorded in the run record (e.g., seed `52010` for the promotion run in Section 6.1).
 3. **Evaluation attempt semantics:** Evaluation behavior corresponds to `attempt_index = 0`; training-only exploration rules (Section 7.2) apply only when `attempt_index > 0`.
 4. **Offline coupling:** In the reported workspace configuration, `sandbox.offline_default=true` and `models.allow_remote_downloads=false` in `<WS_ROOT>/cis_config.yaml`, preventing network-dependent variability by default.
-5. **Sandbox mediation:** Tool execution is routed through the sandbox module; offline mode is enforced via Docker `--network none` or local socket blocking, and the spec mandates ERR-002 + incident on network attempts (see `src/cis/sandbox/docker.py`, `spec/11_SECURITY_AND_CONTAINMENT.md`).
+5. **Sandbox mediation:** Tool execution is routed through the sandbox module; offline mode is enforced via Docker `--network none` or local socket blocking, and the spec mandates ERR-002 + incident on network attempts (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`).
 6. **Immutable provenance:** Each run writes an immutable, schema-validated run record capturing at least: seed, config hash, git state (including commit and “dirty” status), artifact references, model selector, and promotion decision information.
-7. **Config hashing:** The config hash is SHA-256 over the resolved config mapping serialized as canonical JSON (sorted keys) in `load_and_resolve_config` (see `src/cis/core/config.py`, `src/cis/core/hashing.py`).
-8. **Artifact addressing:** `compute_schema_hash` computes SHA-256 over canonical JSON (sorted keys, `schema_hash`/`created_at` removed; primary id removed for content-addressed schemas) and writes both `schema_hash` and the primary id; ART-* paths are resolved via the canonical registry (see `src/cis/core/hashing.py`, `spec/00_CANONICAL.md`).
+7. **Config hashing:** The config hash is SHA-256 over the resolved config mapping serialized as canonical JSON (sorted keys) (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`).
+8. **Artifact addressing:** `compute_schema_hash` computes SHA-256 over canonical JSON (sorted keys, `schema_hash`/`created_at` removed; primary id removed for content-addressed schemas) and writes both `schema_hash` and the primary id; ART-* paths are resolved via the canonical registry (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`).
 9. **Environment fingerprinting requirement:** Hardware and library nondeterminism (e.g., GPU kernel nondeterminism) is not addressed in the current draft; strict reproducibility therefore additionally requires matching environment fingerprints. **TODO:** report OS/GPU/driver/CUDA/container and dependency versions for the runs reported here.
-10. **Incident handling for determinism:** `CMD-013` (`cis inspect determinism-check`) reruns evaluation for `--runs N` and compares pass vectors; mismatches set ERR-001 and mark the run as failed in the run record (see `src/cis/cli/main.py`, `spec/00_CANONICAL.md`).
+10. **Incident handling for determinism:** `CMD-013` (`cis inspect determinism-check`) reruns evaluation for `--runs N` and compares pass vectors; mismatches set ERR-001 and mark the run as failed in the run record (implementation withheld; see `docs/METHODS_EXTRACTED_PUBLIC.md`).
 
 ### 8.3 Provenance pointers
 
@@ -351,7 +348,7 @@ The system description states that run records capture git commit and whether th
 2. **Hidden subset not evaluated here:** Default PASS@1 excludes hidden subsets; sealed evaluator mode exists but is not used for the reported PASS@1 values.
 3. **Incomplete methodological specification:** Remaining gaps are limited to environment fingerprints and optimizer/hyperparameter disclosure for the reported runs; these are enumerated as TODOs in Sections 4.6 and 8.2.
 4. **No external baselines:** The reported gains are relative to an internal baseline iteration (iter-000021) and do not compare to external benchmarks or competing methods.
-5. **Security model scope:** The threat model and offline policy are specified in `spec/11_SECURITY_AND_CONTAINMENT.md`, and the sandbox implementation lives in `src/cis/sandbox/docker.py`; remaining work is documenting the runtime environment for the reported runs.
+5. **Security model scope:** The threat model and offline policy are implemented in the private codebase; remaining work is documenting the runtime environment for the reported runs.
 
 ---
 
