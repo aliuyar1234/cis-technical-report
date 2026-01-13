@@ -26,4 +26,10 @@ DI50 (iter-000149): **2.2083** with **CI95** **[1.7033, 2.7133]**.
 2. Inspect `/evidence/README.md` for the list of included redacted artifacts and redaction policy.
 3. Cross-check the PASS@1 table and DI50/CI95 values against the evidence files (when available).
 
+## Evidence Verification (Quick Checks)
+
+- Compare PASS@1 values in `evidence/reports/iter-000021/metrics.json` and `evidence/reports/iter-000149/metrics.json` against the table above.
+- Confirm DI50/CI95 in `evidence/reports/iter-000149/summary.md` matches the value stated in the paper and README.
+- Verify run IDs and seeds in `evidence/runs/*/run_record.json` match the IDs cited in the paper.
+
 For release details and redaction policy, see `docs/PUBLIC_RELEASE_NOTES.md` and `docs/SECURITY_AND_PRIVACY.md`.
