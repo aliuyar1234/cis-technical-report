@@ -2,7 +2,7 @@
 
 CIS (Compounding Intelligence Sandbox) is an offline-by-default, determinism-first system for verifier-grounded capability growth on verifiable tasks, with immutable run records and promotion/rollback gating for regressions.
 
-Key links: [Paper](docs/PAPER.md) · [Evidence](evidence/README.md) · [Release notes](docs/PUBLIC_RELEASE_NOTES.md) · [Security & privacy](docs/SECURITY_AND_PRIVACY.md)
+Key links: [Paper](docs/PAPER.md) · [Evidence](evidence/README.md) · [Release notes](docs/PUBLIC_RELEASE_NOTES.md) · [Security & privacy](docs/SECURITY_AND_PRIVACY.md) · [DOI](https://doi.org/10.5281/zenodo.18234776)
 
 ## Results Snapshot
 
