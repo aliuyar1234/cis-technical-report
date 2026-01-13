@@ -99,7 +99,7 @@ flowchart LR
   A[CLI: cis<br/>init/run/eval/train<br/>frontier govern/calibrate<br/>report render/serve] --> B[Run Record<br/>immutable, schema-validated]
   A --> C[Workspace Artifacts<br/>content-addressed dirs<br/>schema-validated JSON]
   A --> D[Sandbox Module<br/>tool execution<br/>offline-by-default]
-  D --> E[Verifier(s)<br/>deterministic pass/fail]
+  D --> E[Verifier<br/>deterministic pass or fail]
   E --> F[Metrics/Reports<br/>PASS@1, DI50/CI95<br/>iter summaries]
   F --> G[Promotion/Rollback Gates<br/>(Never-Worse)]
   G --> H[Adapters Registry<br/>PEFT: LoRA/LoRA+/DoRA]
