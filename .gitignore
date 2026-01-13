@@ -1,0 +1,23 @@
+# Docs-only release exclusions
+src/
+spec/
+tests/
+*.pt
+*.bin
+*.safetensors
+adapters/
+checkpoints/
+artifacts/
+runs/
+reports/
+models/
+cache/
+.ci/
+.env
+.env.*
+*.lock
+*token*
+*unlock*
+*secret*
+*key*
+docs/METHODS_EXTRACTED_PRIVATE.md

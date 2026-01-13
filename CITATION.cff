@@ -1,0 +1,6 @@
+cff-version: 1.2.0
+title: "CIS: A Deterministic, Offline-by-Default Compounding Intelligence Sandbox with Verifier-Gated Self-Improvement"
+authors:
+  - name: aliuyar1234
+date-released: 2026-01-12
+url: "https://github.com/REPLACE_ME/cis-technical-report"
