@@ -21,3 +21,7 @@ cache/
 *secret*
 *key*
 docs/METHODS_EXTRACTED_PRIVATE.md
+!evidence/reports/
+!evidence/reports/**
+!evidence/runs/
+!evidence/runs/**
