@@ -20,6 +20,10 @@ cache/
 *unlock*
 *secret*
 *key*
+*.pdf
+*.tex
+_private_latex_export/
+latex/
 docs/METHODS_EXTRACTED_PRIVATE.md
 !evidence/reports/
 !evidence/reports/**
